@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using coding_test_ranking.infrastructure.api;
+using coding_test_ranking.infrastructure.services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace coding_test_ranking.Controllers
@@ -11,22 +9,35 @@ namespace coding_test_ranking.Controllers
     [ApiController]
     public class AdsController : ControllerBase
     {
+        private IAdsService _service;
+
+        public AdsController(IAdsService service)
+        {
+            _service = service;
+        }
+
         // GET api/values
         [HttpGet]
+        [Route("values")]
         public ActionResult<IEnumerable<QualityAd>> qualityListing()
         {
-            return NotFound();
+            var data = _service.GetQualityAds();
+            return data;
         }
         [HttpGet]
+        [Route("public")]
         public ActionResult<IEnumerable<PublicAd>> publicListing()
         {
-            return NotFound();
+            var data = _service.GetPublicAds();
+            return data;
         }
 
         [HttpGet]
+        [Route("calculateScore")]
         public ActionResult calculateScore()
         {
-            return NotFound();
+            _service.calculateScoreForAds();
+            return StatusCode(200);
         }
     }
 }

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace coding_test_ranking.infrastructure.api
 {
     public class PublicAd
     {
-
         public int Id { get; set; }
         public string Typology { get; set; }
         public string Description { get; set; }

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<QualityAd>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<table class="table table-sm table-striped table-bordered m-2">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Typology</th>
+            <th>Description</th>
+            <th>Pictures</th>
+            <th>House size</th>
+            <th>Garden size</th>
+            <th>Score</th>
+            <th>Irrelevance since</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+        <tr>
+            <td>@r.Id</td>
+            <td>@r.Typology</td>
+            <td>@r.Description</td>
+            <td>
+                <ul>
+                    @foreach (var o in r.PictureUrls)
+                    {
+                        <li>@o</li>
+                    }
+                </ul>
+            </td>
+            <td>@r.HouseSize </td>
+            <td>@r.GardenSize</td>
+            <td>@r.Score</td>
+            <td>@if (r.IrrelevantSince != DateTime.MinValue)
+                    @r.IrrelevantSince
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
