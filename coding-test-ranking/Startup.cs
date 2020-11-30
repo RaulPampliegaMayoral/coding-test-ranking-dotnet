@@ -32,6 +32,7 @@ namespace coding_test_ranking
             services.AddScoped<IPicturesRepository, PicturesRepository>();
             services.AddScoped<IRuleCalculator, RuleCalculator>();
             services.AddScoped<IAdsService, AdsService>();
+            services.AddScoped<IPicturesService, PicturesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

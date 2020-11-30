@@ -36,6 +36,14 @@ namespace coding_test_ranking.infrastructure.persistence.repositories
             return _repository.GetAll().Where(c => ids.Contains(c.Id)).ToList();
         }
 
+        public IList<PictureVO> GetPictures(IEnumerable<string> urls)
+        {
+            if (urls == null)
+                return new List<PictureVO>();
+
+            return _repository.GetAll().Where(c => urls.Contains(c.Url)).ToList();
+        }
+
         public void Save(PictureVO value)
         {
             _repository.SaveOrUpdate(value);

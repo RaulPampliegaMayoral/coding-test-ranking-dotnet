@@ -1,0 +1,57 @@
+﻿@model PublicAd
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create AD</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div class="form-group">
+                <label for="typology" class="control-label">Typology</label>
+                <select name="typology" class="form-control">
+                    <option value="FLAT">Flat</option>
+                    <option value="CHALET">Chalet</option>
+                    <option value="GARAGE">Garage</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="description" class="control-label">Description</label>
+                <input name="description" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="Housesize" class="control-label">House size</label>
+                <input name="Housesize" type="number" data-val="true" data-val-number="The field Price must be a number." class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="GardenSize" class="control-label">Garden size</label>
+                <input name="GardenSize" type="number" data-val="true" data-val-number="The field Price must be a number." class="form-control" />
+            </div>
+            <div class="form-group">
+                <span class="control-label">Pictures url</span>
+                <button id="addPicture" class="btn btn-secondary btn-sm" type="button">Add</button>
+                <div id="picturesContainer">
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="AdsManagement" asp-action="Index">Back to List</a>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#addPicture").on('click', function (event) {
+            let num_pictures = $("input[name^='picture_']").length;
+            $('#picturesContainer').append('<div class="row"><div class="col"><input class="form-control" name="picture_"' + num_pictures + '/></div><div class="col"><select class="form-control" name="quality_"' + num_pictures + '><option value="HD">HD</option><option value="SD" selected>SD</option></select></div></div>');
+        });
+    });
+</script>

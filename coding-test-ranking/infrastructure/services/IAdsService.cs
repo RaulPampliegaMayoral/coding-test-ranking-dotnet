@@ -8,6 +8,9 @@ namespace coding_test_ranking.infrastructure.services
         void calculateScoreForAds();
         List<QualityAd> GetQualityAds();
         List<PublicAd> GetPublicAds();
-
+        List<PublicAd> GetAllAds();
+        PublicAd GetAdById(int id);
+        void DeleteAdById(int id);
+        void SaveAd(PublicAd ad);
     }
 }

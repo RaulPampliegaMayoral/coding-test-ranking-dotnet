@@ -24,10 +24,10 @@
             <td>@r.Typology</td>
             <td>@r.Description</td>
             <td>
-                <ul>
+                <ul class="list-group list-group-flush">
                     @foreach (var o in r.PictureUrls)
                     {
-                        <li>@o</li>
+                        <li class="list-group-item">@o</li>
                     }
                 </ul>
             </td>

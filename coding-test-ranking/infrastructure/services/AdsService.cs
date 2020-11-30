@@ -80,17 +80,55 @@ namespace coding_test_ranking.infrastructure.services
             return qualityAd;
         }
 
+        private AdVO TransformPublicADToAdVO(PublicAd publicAd)
+        {
+            return new AdVO
+            {
+                Id = publicAd.Id,
+                Typology = publicAd.Typology,
+                Description = publicAd.Description,
+                HouseSize = publicAd.HouseSize,
+                GardenSize = publicAd.GardenSize,
+                Pictures = _picturesRepository.GetPictures(publicAd.PictureUrls).Select(c => c.Id).ToList(),
+            };
+        }
+
         private PublicAd TransformAdToPublicAd(AdVO ad)
         {
             return new PublicAd
             {
                 Id = ad.Id,
-                Typology = ad.Description,
+                Typology = ad.Typology,
                 Description = ad.Description,
                 PictureUrls = _picturesRepository.GetPictures(ad.Pictures).Where(c => c.Url != null).Select(c => c.Url).ToList(),
                 HouseSize = ad.HouseSize ?? 0,
                 GardenSize = ad.GardenSize ?? 0,
             };
+        }
+
+        public List<PublicAd> GetAllAds()
+        {
+            var ads = _adsRepository.GetAll();
+            var publicAds = ads.Select(c => TransformAdToPublicAd(c)).ToList();
+            return publicAds;
+        }
+
+        public PublicAd GetAdById(int id)
+        {
+            var ad = _adsRepository.GetById(id);
+            return TransformAdToPublicAd(ad);
+        }
+
+        public void DeleteAdById(int id)
+        {
+            var ad = _adsRepository.GetById(id);
+            _adsRepository.Delete(ad);
+        }
+
+        public void SaveAd(PublicAd publicAd)
+        {
+            var ad = TransformPublicADToAdVO(publicAd);
+            _adsRepository.Save(ad);
         }
     }
 }
