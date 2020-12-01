@@ -11,6 +11,10 @@ namespace coding_test_ranking.Controllers
     public class HomeController : Controller
     {
         private readonly string _apiBaseUrl;
+        private readonly static HttpClient _apiClient = new HttpClient(new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+        });
 
         public HomeController(IConfiguration configuration)
         {
@@ -26,20 +30,17 @@ namespace coding_test_ranking.Controllers
         public async Task<IActionResult> PublicAds()
         {
             var publicAds = new List<PublicAd>();
-            using (var client = new HttpClient())
+            using(var response = await _apiClient.GetAsync($"{_apiBaseUrl}/public"))
             {
-                using(var response = await client.GetAsync($"{_apiBaseUrl}/public"))
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        var apiResponse = await response.Content.ReadAsStringAsync();
-                        publicAds.AddRange(JsonConvert.DeserializeObject<IEnumerable<PublicAd>>(apiResponse));
-                    }
-                    else
-                    {
-                        ModelState.Clear();
-                        ModelState.AddModelError(string.Empty, "An error ocurred getting public ads listing");
-                    }
+                    var apiResponse = await response.Content.ReadAsStringAsync();
+                    publicAds.AddRange(JsonConvert.DeserializeObject<IEnumerable<PublicAd>>(apiResponse));
+                }
+                else
+                {
+                    ModelState.Clear();
+                    ModelState.AddModelError(string.Empty, "An error ocurred getting public ads listing");
                 }
             }
             return View(publicAds);
@@ -49,20 +50,17 @@ namespace coding_test_ranking.Controllers
         public async Task<IActionResult> QualityAds()
         {
             var qualityAds = new List<QualityAd>();
-            using (var client = new HttpClient())
+            using (var response = await _apiClient.GetAsync($"{_apiBaseUrl}/values"))
             {
-                using (var response = await client.GetAsync($"{_apiBaseUrl}/values"))
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        var apiResponse = await response.Content.ReadAsStringAsync();
-                        qualityAds.AddRange(JsonConvert.DeserializeObject<IEnumerable<QualityAd>>(apiResponse));
-                    }
-                    else
-                    {
-                        ModelState.Clear();
-                        ModelState.AddModelError(string.Empty, "An error ocurred getting quality ads listing");
-                    }
+                    var apiResponse = await response.Content.ReadAsStringAsync();
+                    qualityAds.AddRange(JsonConvert.DeserializeObject<IEnumerable<QualityAd>>(apiResponse));
+                }
+                else
+                {
+                    ModelState.Clear();
+                    ModelState.AddModelError(string.Empty, "An error ocurred getting quality ads listing");
                 }
             }
             return View(qualityAds);
@@ -71,15 +69,12 @@ namespace coding_test_ranking.Controllers
         [Route("calculateScore")]
         public async Task<IActionResult> CalculateScore()
         {
-            using (var client = new HttpClient())
+            using (var response = await _apiClient.GetAsync($"{_apiBaseUrl}/calculateScore"))
             {
-                using (var response = await client.GetAsync($"{_apiBaseUrl}/calculateScore"))
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                    {
-                        ModelState.Clear();
-                        ModelState.AddModelError(string.Empty, "An error ocurred calculating scores for ads");
-                    }
+                    ModelState.Clear();
+                    ModelState.AddModelError(string.Empty, "An error ocurred calculating scores for ads");
                 }
             }
 
